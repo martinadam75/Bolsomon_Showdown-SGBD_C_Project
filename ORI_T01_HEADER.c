@@ -711,21 +711,99 @@ void liberar_memoria_menu() {
 // ---------------- Manipulação da lista invertida ----------------
 
 void inverted_list_insert(char *chave_secundaria, char *chave_primaria, inverted_list *t) {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "inverted_list_insert()");
+	int sec_idx = -1;
+
+	// Busca linear pela chave secundária (nome do bolsomon), pois o índice ainda não está ordenado.
+	for (unsigned i = 0; i < t->qtd_registros_secundario; ++i) {
+		if (strcmp(t->treinador_bolsomons_secundario_idx[i].chave_secundaria, chave_secundaria) == 0) {
+			sec_idx = i;
+			break;
+		}
+	}
+
+
+	// --- Caso 1: A chave secundária (nome) NÃO existe. ---
+	if (sec_idx == -1) { 
+
+		// Adiciona a chave primária (id_treinador) ao final do índice primário.
+		int new_primary_idx = t->qtd_registros_primario;
+		strcpy(t->treinador_bolsomons_primario_idx[new_primary_idx].chave_primaria, chave_primaria);
+		t->treinador_bolsomons_primario_idx[new_primary_idx].proximo_indice = -1; // É o fim da lista.
+		t->qtd_registros_primario++;
+
+		// Adiciona a chave secundária (nome) ao final do índice secundário.
+		int new_secondary_idx = t->qtd_registros_secundario;
+		strcpy(t->treinador_bolsomons_secundario_idx[new_secondary_idx].chave_secundaria, chave_secundaria);
+		// Aponta para o registro primário que acabamos de criar.
+		t->treinador_bolsomons_secundario_idx[new_secondary_idx].primeiro_indice = new_primary_idx;
+		t->qtd_registros_secundario++;
+
+	} 
+
+	// --- Caso 2: A chave secundária (nome) Existe. ---
+	else {
+		
+		// Encontra o final da lista encadeada no índice primário.
+		int current_primary_idx = t->treinador_bolsomons_secundario_idx[sec_idx].primeiro_indice;
+		while (t->treinador_bolsomons_primario_idx[current_primary_idx].proximo_indice != -1) {
+			current_primary_idx = t->treinador_bolsomons_primario_idx[current_primary_idx].proximo_indice;
+		}
+		
+		// Adiciona a nova chave primária (id_treinador) no final do índice primário.
+		int new_primary_idx = t->qtd_registros_primario;
+		strcpy(t->treinador_bolsomons_primario_idx[new_primary_idx].chave_primaria, chave_primaria);
+		t->treinador_bolsomons_primario_idx[new_primary_idx].proximo_indice = -1;
+		t->qtd_registros_primario++;
+
+		// "Conecta" o antigo último elemento da lista a este novo.
+		t->treinador_bolsomons_primario_idx[current_primary_idx].proximo_indice = new_primary_idx;
+	}
 }
 
 bool inverted_list_secondary_search(int *result, bool exibir_caminho, char *chave_secundaria, inverted_list *t) {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "inverted_list_secondary_search()");
-	return false;
+	// Cria uma chave de busca temporária.
+	treinador_bolsomons_secundario_index key;
+	strcpy(key.chave_secundaria, chave_secundaria);
+
+	// Realiza a busca binária no índice secundário.
+	int found_idx = busca_binaria(&key, t->treinador_bolsomons_secundario_idx, t->qtd_registros_secundario, sizeof(treinador_bolsomons_secundario_index), qsort_treinador_bolsomons_secundario_idx, exibir_caminho, 0);
+
+	if (found_idx == -1) {
+		// Se não encontrou, retorna false.
+		return false;
+	} else {
+		// Se encontrou, armazena o índice do início da lista primária.
+		if (result) {
+			*result = t->treinador_bolsomons_secundario_idx[found_idx].primeiro_indice;
+		}
+		return true;
+	}
 }
 
 int inverted_list_primary_search(char result[][TAM_CHAVE_TREINADOR_BOLSOMON_PRIMARIO_IDX], bool exibir_caminho, int indice, int *indice_final, inverted_list *t) {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "inverted_list_primary_search()");
-	return 0;
+	int count = 0;
+	int current_idx = indice;
+
+	// Percorre a "lista encadeada" no índice primário.
+	while (current_idx != -1) {
+		if (result) {
+			// Copia a chave encontrada para o vetor de resultados.
+			strcpy(result[count], t->treinador_bolsomons_primario_idx[current_idx].chave_primaria);
+		}
+
+		if (indice_final) {
+			// Mantém o ponteiro 'indice_final' atualizado com o último índice visitado.
+			*indice_final = current_idx;
+		}
+		
+		count++;
+		// Pula para o próximo elemento da lista.
+		current_idx = t->treinador_bolsomons_primario_idx[current_idx].proximo_indice;
+	}
+
+	return count; // Retorna o número de chaves encontradas.
 }
+
 
 // ---------------- Busca binária ----------------
 
