@@ -730,9 +730,73 @@ int inverted_list_primary_search(char result[][TAM_CHAVE_TREINADOR_BOLSOMON_PRIM
 // ---------------- Busca binária ----------------
 
 int busca_binaria(const void *key, const void *base0, size_t nmemb, size_t size, int (*compar)(const void *, const void *), bool exibir_caminho, int retorno_se_nao_encontrado) {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "busca_binaria()");
-	return -1;
+	
+	// Caso especial: se o "arquivo" (vetor) estiver vazio, não há o que buscar.
+	if (nmemb == 0) {
+		if (exibir_caminho) {
+			printf(REGS_PERCORRIDOS "\n");
+		}
+		// Se pediram sucessor, o sucessor do nada é o índice 0. Senão, não há.
+		return (retorno_se_nao_encontrado == 1) ? 0 : -1;
+	}
+
+	int low = 0;
+	int high = nmemb - 1;
+	int mid;
+	int found_idx = -1; // -1 indica que não foi encontrado.
+
+	// Buffer para armazenar o caminho percorrido.
+	char path_buffer[nmemb * 6]; // Espaço suficiente para os índices.
+	path_buffer[0] = '\0';
+	
+	while (low <= high) {
+		// Calcula o índice do meio.
+		mid = low + (high - low + 1) / 2;
+		
+		if (exibir_caminho) {
+			// Constrói a string do caminho a ser exibido.
+			char mid_str[7];
+			sprintf(mid_str, " %d", mid);
+			strcat(path_buffer, mid_str);
+		}
+
+		// Ponteiro para o elemento do meio do vetor.
+		const void *mid_ptr = (char*)base0 + mid * size;
+		int cmp = compar(key, mid_ptr);
+
+		if (cmp == 0) {
+			// Elemento encontrado!
+			found_idx = mid;
+			break;
+		} else if (cmp < 0) {
+			// A chave é menor, busca na metade inferior.
+			high = mid - 1;
+		} else {
+			// A chave é maior, busca na metade superior.
+			low = mid + 1;
+		}
+	}
+	
+	if (exibir_caminho) {
+		printf("%s:%s\n", REGS_PERCORRIDOS, path_buffer);
+	}
+
+	if (found_idx != -1) {
+		// Se encontrou, retorna o índice.
+		return found_idx;
+	} else {
+		// Se não encontrou, decide o que retornar com base no parâmetro.
+		switch (retorno_se_nao_encontrado) {
+			case -1: // Predecessor
+				return high;
+			case 1: // Sucessor
+				return low;
+			case 0: // Nulo (padrão)
+			default:
+				// Retorna -1 para indicar que não foi encontrado.
+				return -1;
+		}
+	}
 }
 
 // ---------------- Funções SET de arquivos ----------------
