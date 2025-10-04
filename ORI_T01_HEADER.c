@@ -861,13 +861,31 @@ void buscar_treinador_id_menu(char *id_treinador) {
 }
 
 void buscar_bolsomon_id_menu(char *id_bolsomon) {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "buscar_bolsomon_id_menu()");
+	bolsomons_index key;
+	strcpy(key.id_bolsomon, id_bolsomon);
+
+	// Chama a busca binária no índice de bolsomons, pedindo para exibir o caminho.
+	int found_idx = busca_binaria(&key, bolsomons_idx, qtd_registros_bolsomons, sizeof(bolsomons_index), qsort_bolsomons_idx, true, 0);
+
+	if (found_idx == -1) {
+		printf(ERRO_REGISTRO_NAO_ENCONTRADO);
+	} else {
+		// Se encontrou, usa o RRN do índice para exibir o registro completo.
+		exibir_bolsomon(bolsomons_idx[found_idx].rrn);
+	}
 }
 
 void buscar_batalha_id_menu(char *id_batalha) {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "buscar_batalha_id_menu()");
+	batalhas_index key;
+	strcpy(key.id_batalha, id_batalha);
+	
+	int found_idx = busca_binaria(&key, batalhas_idx, qtd_registros_batalhas, sizeof(batalhas_index), qsort_batalhas_idx, true, 0);
+
+	if (found_idx == -1) {
+		printf(ERRO_REGISTRO_NAO_ENCONTRADO);
+	} else {
+		exibir_batalha(batalhas_idx[found_idx].rrn);
+	}
 }
 
 // ---------------- Listagem dos registros ----------------
