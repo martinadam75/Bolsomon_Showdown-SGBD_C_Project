@@ -844,8 +844,92 @@ void executar_batalha_menu(char *inicio, char *duracao, char *arena, char *id_tr
 }
 
 void recompensar_campeao_menu(char *data_inicio, char *data_fim, double premio) {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "recompensar_campeao_menu()");
+	// Encontrar todas as batalhas no período especificado.
+	data_index key_data;
+	strcpy(key_data.inicio, data_inicio);
+	int start_idx = busca_binaria(&key_data, data_idx, qtd_registros_batalhas, sizeof(data_index), qsort_data_idx, false, 1);
+
+	char batalhas_periodo[MAX_REGISTROS][TAM_ID_BATALHA];
+	int qtd_batalhas_periodo = 0;
+	for (unsigned i = start_idx; i < qtd_registros_batalhas; i++) {
+		if (strcmp(data_idx[i].inicio, data_fim) > 0) {
+			break;
+		}
+		strcpy(batalhas_periodo[qtd_batalhas_periodo++], data_idx[i].id_batalha);
+	}
+
+	if (qtd_batalhas_periodo == 0) {
+		printf(AVISO_NENHUM_REGISTRO_ENCONTRADO);
+		return;
+	}
+	// Ordena os IDs de batalha para permitir busca binária neles.
+	qsort(batalhas_periodo, qtd_batalhas_periodo, TAM_ID_BATALHA, qsort_id_cmp);
+
+	// Agregar os placares de todos os treinadores que participaram dessas batalhas.
+	Info_Treinador placares[MAX_REGISTROS];
+	int qtd_placares = 0;
+
+	for (unsigned i = 0; i < qtd_registros_resultados; i++) {
+		Resultado r = recuperar_registro_resultado(i);
+		
+		// Verifica se o resultado pertence a uma das batalhas do período.
+		if (bsearch(r.id_batalha, batalhas_periodo, qtd_batalhas_periodo, TAM_ID_BATALHA, qsort_id_cmp)) {
+			int p_idx = -1;
+			// Procura o treinador na nossa lista de placares.
+			for (int j = 0; j < qtd_placares; j++) {
+				if (strcmp(placares[j].id_treinador, r.id_treinador) == 0) {
+					p_idx = j;
+					break;
+				}
+			}
+			// Se não achou, adiciona um novo.
+			if (p_idx == -1) {
+				p_idx = qtd_placares++;
+				strcpy(placares[p_idx].id_treinador, r.id_treinador);
+				placares[p_idx].vezes_mais_tempo = 0;
+				placares[p_idx].vezes_mais_derrotados = 0;
+				placares[p_idx].vezes_mais_dano = 0;
+			}
+			// Atualiza os placares.
+			if (r.foi_maior_duracao) placares[p_idx].vezes_mais_tempo++;
+			if (r.foi_mais_derrotas) placares[p_idx].vezes_mais_derrotados++;
+			if (r.foi_mais_dano) placares[p_idx].vezes_mais_dano++;
+		}
+	}
+	
+	if (qtd_placares == 0) {
+		printf(AVISO_NENHUM_REGISTRO_ENCONTRADO);
+		return;
+	}
+
+	// Ordena os placares para encontrar o campeão (o primeiro da lista).
+	qsort(placares, qtd_placares, sizeof(Info_Treinador), qsort_info_treinador);
+
+	// Encontra o primeiro treinador ATIVO na lista ordenada e o premia.
+	for (int i = 0; i < qtd_placares; i++) {
+		treinadores_index key_t;
+		strcpy(key_t.id_treinador, placares[i].id_treinador);
+		int found_t_idx = busca_binaria(&key_t, treinadores_idx, qtd_registros_treinadores, sizeof(treinadores_index), qsort_treinadores_idx, false, 0);
+
+		if (found_t_idx != -1 && treinadores_idx[found_t_idx].rrn != -1) {
+			// Encontrou um campeão ativo!
+			int rrn_vencedor = treinadores_idx[found_t_idx].rrn;
+			Treinador t = recuperar_registro_treinador(rrn_vencedor);
+
+			// Se i > 0, significa que o(s) primeiro(s) colocado(s) foram removidos.
+			if (i > 0) {
+				printf(ERRO_TREINADOR_REMOVIDO, premio, t.apelido, placares[i].vezes_mais_tempo, placares[i].vezes_mais_derrotados, placares[i].vezes_mais_dano);
+			} else {
+				printf(CONCEDER_PREMIO, t.apelido, t.vezes_mais_tempo, t.vezes_mais_derrotados, t.vezes_mais_dano, premio);
+			}
+			
+			// Atualiza o saldo e a data do prêmio.
+			t.bolsobolas += premio;
+			strcpy(t.premio, data_fim);
+			escrever_registro_treinador(t, rrn_vencedor);
+			return; 
+		}
+	}
 }
 
 // ---------------- Busca pelo índice ----------------
