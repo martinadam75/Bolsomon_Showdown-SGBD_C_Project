@@ -1101,23 +1101,35 @@ void imprimir_arquivo_treinadores_menu() {
 }
 
 void imprimir_arquivo_bolsomons_menu() {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "imprimir_arquivo_bolsomons_menu()");
+	if(!qtd_registros_bolsomons){
+		printf(ERRO_ARQUIVO_VAZIO);
+        return;
+    }
+	printf("%.*s\n", qtd_registros_bolsomons * TAM_REGISTRO_BOLSOMON, ARQUIVO_BOLSOMONS);
 }
 
 void imprimir_arquivo_batalhas_menu() {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "imprimir_arquivo_batalhas_menu()");
+	if(!qtd_registros_batalhas){
+		printf(ERRO_ARQUIVO_VAZIO);
+        return;
+    }
+	printf("%.*s\n", qtd_registros_batalhas * TAM_REGISTRO_BATALHA, ARQUIVO_BATALHAS);
 }
 
 void imprimir_arquivo_resultados_menu() {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "imprimir_arquivo_resultados_menu()");
+	if(!qtd_registros_resultados){
+		printf(ERRO_ARQUIVO_VAZIO);
+        return;
+    }
+	printf("%.*s\n", qtd_registros_resultados * TAM_REGISTRO_RESULTADO, ARQUIVO_RESULTADOS);
 }
 
 void imprimir_arquivo_treinador_possui_bolsomon_menu() {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "imprimir_arquivo_treinador_possui_bolsomon_menu()");
+	if(!qtd_registros_treinador_possui_bolsomon){
+		printf(ERRO_ARQUIVO_VAZIO);
+        return;
+    }
+	printf("%.*s\n", qtd_registros_treinador_possui_bolsomon * TAM_REGISTRO_TREINADOR_POSSUI_BOLSOMON, ARQUIVO_TREINADOR_POSSUI_BOLSOMON);
 }
 
 // ---------------- Exibição dos índices ----------------
@@ -1132,43 +1144,77 @@ void imprimir_treinadores_idx_menu() {
 }
 
 void imprimir_bolsomons_idx_menu() {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "imprimir_bolsomons_idx_menu()");
+	if(!bolsomons_idx || !qtd_registros_bolsomons){
+		printf(ERRO_ARQUIVO_VAZIO);
+        return;
+    }
+	for(unsigned i = 0; i < qtd_registros_bolsomons; i++)
+		printf("%s, %d\n", bolsomons_idx[i].id_bolsomon, bolsomons_idx[i].rrn);
 }
 
 void imprimir_batalhas_idx_menu() {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "imprimir_batalhas_idx_menu()");
+	if(!batalhas_idx || !qtd_registros_batalhas){
+		printf(ERRO_ARQUIVO_VAZIO);
+        return;
+    }
+	for(unsigned i = 0; i < qtd_registros_batalhas; i++)
+		printf("%s, %d\n", batalhas_idx[i].id_batalha, batalhas_idx[i].rrn);
 }
 
 void imprimir_resultados_idx_menu() {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "imprimir_resultados_idx_menu()");
+	if(!resultados_idx || !qtd_registros_resultados){
+		printf(ERRO_ARQUIVO_VAZIO);
+        return;
+    }
+	for(unsigned i = 0; i < qtd_registros_resultados; i++)
+		printf("%s, %s, %d\n", resultados_idx[i].id_treinador, resultados_idx[i].id_batalha, resultados_idx[i].rrn);
 }
 
 void imprimir_treinador_possui_bolsomon_idx_menu() {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "imprimir_treinador_possui_bolsomon_idx_menu()");
+	if(!treinador_possui_bolsomon_idx || !qtd_registros_treinador_possui_bolsomon){
+		printf(ERRO_ARQUIVO_VAZIO);
+        return;
+    }
+	for(unsigned i = 0; i < qtd_registros_treinador_possui_bolsomon; i++)
+		printf("%s, %s, %d\n", treinador_possui_bolsomon_idx[i].id_treinador, treinador_possui_bolsomon_idx[i].id_bolsomon, treinador_possui_bolsomon_idx[i].rrn);
 }
 
 void imprimir_preco_bolsomon_idx_menu() {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "imprimir_preco_bolsomon_idx_menu()");
+	if(!preco_bolsomon_idx || !qtd_registros_bolsomons){
+		printf(ERRO_ARQUIVO_VAZIO);
+        return;
+    }
+	for(unsigned i = 0; i < qtd_registros_bolsomons; i++)
+		printf("%.2lf, %s\n", preco_bolsomon_idx[i].preco_bolsobolas, preco_bolsomon_idx[i].id_bolsomon);
 }
 
 void imprimir_data_idx_menu() {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "imprimir_data_idx_menu()");
+	if(!data_idx || !qtd_registros_batalhas){
+		printf(ERRO_ARQUIVO_VAZIO);
+        return;
+    }
+	for(unsigned i = 0; i < qtd_registros_batalhas; i++)
+		printf("%s, %s\n", data_idx[i].inicio, data_idx[i].id_batalha);
 }
 
 void imprimir_treinador_bolsomons_secundario_idx_menu() {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "imprimir_treinador_bolsomons_secundario_idx_menu()");
+	inverted_list *t = &treinador_bolsomons_idx;
+	if(!t->treinador_bolsomons_secundario_idx || t->qtd_registros_secundario == 0){
+		printf(ERRO_ARQUIVO_VAZIO);
+        return;
+    }
+	for(unsigned i = 0; i < t->qtd_registros_secundario; i++)
+		printf("%s, %d\n", t->treinador_bolsomons_secundario_idx[i].chave_secundaria, t->treinador_bolsomons_secundario_idx[i].primeiro_indice);
 }
 
 void imprimir_treinador_bolsomons_primario_idx_menu() {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "imprimir_treinador_bolsomons_primario_idx_menu()");
+	inverted_list *t = &treinador_bolsomons_idx;
+	if(!t->treinador_bolsomons_primario_idx || t->qtd_registros_primario == 0){
+		printf(ERRO_ARQUIVO_VAZIO);
+        return;
+    }
+	for(unsigned i = 0; i < t->qtd_registros_primario; i++)
+		printf("%s, %d\n", t->treinador_bolsomons_primario_idx[i].chave_primaria, t->treinador_bolsomons_primario_idx[i].proximo_indice);
 }
 
 // ---------------- Liberação de espaço e memória ----------------
