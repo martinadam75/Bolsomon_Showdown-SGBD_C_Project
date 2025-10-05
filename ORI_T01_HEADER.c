@@ -1247,8 +1247,15 @@ void liberar_espaco_menu() {
 }
 
 void liberar_memoria_menu() {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "liberar_memoria_menu()");
+	if (treinadores_idx) free(treinadores_idx);
+	if (bolsomons_idx) free(bolsomons_idx);
+	if (batalhas_idx) free(batalhas_idx);
+	if (resultados_idx) free(resultados_idx);
+	if (treinador_possui_bolsomon_idx) free(treinador_possui_bolsomon_idx);
+	if (preco_bolsomon_idx) free(preco_bolsomon_idx);
+	if (data_idx) free(data_idx);
+	if (treinador_bolsomons_idx.treinador_bolsomons_secundario_idx) free(treinador_bolsomons_idx.treinador_bolsomons_secundario_idx);
+	if (treinador_bolsomons_idx.treinador_bolsomons_primario_idx) free(treinador_bolsomons_idx.treinador_bolsomons_primario_idx);
 }
 
 // ---------------- Manipulação da lista invertida ----------------
