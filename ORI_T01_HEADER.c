@@ -900,18 +900,110 @@ void listar_treinadores_id_menu() {
 }
 
 void listar_treinadores_bolsomons_menu(char *bolsomon){
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "listar_treinadores_bolsomons_menu()");
+	int primeiro_indice_primario;
+
+	// Busca na lista invertida pelo nome do bolsomon
+	bool found = inverted_list_secondary_search(&primeiro_indice_primario, true, bolsomon, &treinador_bolsomons_idx);
+	
+	if (!found) {
+		// Se a busca secundária não encontrar o bolsomon, verifica se há algum registro antes de imprimir o aviso.
+		if (treinador_bolsomons_idx.qtd_registros_secundario == 0) {
+			printf(AVISO_NENHUM_REGISTRO_ENCONTRADO);
+		}
+		return;
+	}
+
+	// Recupera a lista de IDs de treinadores do índice primário.
+	char ids_encontrados[MAX_REGISTROS][TAM_CHAVE_TREINADOR_BOLSOMON_PRIMARIO_IDX];
+	int qtd_ids = inverted_list_primary_search(ids_encontrados, false, primeiro_indice_primario, NULL, &treinador_bolsomons_idx);
+
+	if (qtd_ids == 0) {
+		printf(AVISO_NENHUM_REGISTRO_ENCONTRADO);
+		return;
+	}
+
+	// Ordena os IDs de treinador recuperados
+	qsort(ids_encontrados, qtd_ids, TAM_CHAVE_TREINADOR_BOLSOMON_PRIMARIO_IDX, qsort_string_cmp);
+
+	// Para cada ID ordenado, busca o registro completo do treinador e o exibe.
+	for (int i = 0; i < qtd_ids; i++) {
+		treinadores_index key_t;
+		strcpy(key_t.id_treinador, ids_encontrados[i]);
+		int found_t_idx = busca_binaria(&key_t, treinadores_idx, qtd_registros_treinadores, sizeof(treinadores_index), qsort_treinadores_idx, false, 0);
+		
+		if (found_t_idx != -1 && treinadores_idx[found_t_idx].rrn != -1) {
+			exibir_treinador(treinadores_idx[found_t_idx].rrn);
+		}
+	}
 }
 
 void listar_bolsomons_compra_menu(char *id_treinador) {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "listar_bolsomons_compra_menu()");
+	// Encontra o treinador e seu saldo.
+	treinadores_index key_t;
+	strcpy(key_t.id_treinador, id_treinador);
+	int found_t_idx = busca_binaria(&key_t, treinadores_idx, qtd_registros_treinadores, sizeof(treinadores_index), qsort_treinadores_idx, false, 0);
+
+	if (found_t_idx == -1 || treinadores_idx[found_t_idx].rrn == -1) {
+		printf(ERRO_REGISTRO_NAO_ENCONTRADO);
+		return;
+	}
+	Treinador t = recuperar_registro_treinador(treinadores_idx[found_t_idx].rrn);
+	double saldo = t.bolsobolas;
+
+	// Itera sobre o índice de preços (que está ordenado do mais barato para o mais caro).
+	bool encontrou_algum = false;
+	for (unsigned i = 0; i < qtd_registros_bolsomons; i++) {
+		// Se o preço do bolsomon atual já for maior que o saldo, a busca é interrompida.
+		if (preco_bolsomon_idx[i].preco_bolsobolas > saldo) {
+			break;
+		}
+
+		// O bolsomon é comprável. Precisamos buscar seu RRN para poder exibi-lo.
+		bolsomons_index key_b;
+		strcpy(key_b.id_bolsomon, preco_bolsomon_idx[i].id_bolsomon);
+		int found_b_idx = busca_binaria(&key_b, bolsomons_idx, qtd_registros_bolsomons, sizeof(bolsomons_index), qsort_bolsomons_idx, false, 0);
+
+		if (found_b_idx != -1) {
+			exibir_bolsomon(bolsomons_idx[found_b_idx].rrn);
+			encontrou_algum = true;
+		}
+	}
+
+	if (!encontrou_algum) {
+		printf(AVISO_NENHUM_REGISTRO_ENCONTRADO);
+	}
 }
 
 void listar_batalhas_periodo_menu(char *data_inicio, char *data_fim) {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "listar_batalhas_periodo_menu()");
+	// Usa a busca binária para achar o primeiro registro >= data_inicio.
+	data_index key_data;
+	strcpy(key_data.inicio, data_inicio);
+
+	int start_idx = busca_binaria(&key_data, data_idx, qtd_registros_batalhas, sizeof(data_index), qsort_data_idx, true, 1);
+
+	// Itera sobre o índice a partir do ponto encontrado.
+	bool encontrou_algum = false;
+	for (unsigned i = start_idx; i < qtd_registros_batalhas; i++) {
+		// Compara a data da batalha atual com a data final do período.
+		if (strcmp(data_idx[i].inicio, data_fim) > 0) {
+			// Se a data atual já for maior que a data_fim, podemos parar.
+			break;
+		}
+
+		// A batalha está dentro do período. Recupera seu RRN e exibe.
+		batalhas_index key_b;
+		strcpy(key_b.id_batalha, data_idx[i].id_batalha);
+		int found_b_idx = busca_binaria(&key_b, batalhas_idx, qtd_registros_batalhas, sizeof(batalhas_index), qsort_batalhas_idx, false, 0);
+
+		if (found_b_idx != -1) {
+			exibir_batalha(batalhas_idx[found_b_idx].rrn);
+			encontrou_algum = true;
+		}
+	}
+
+	if (!encontrou_algum) {
+		printf(AVISO_NENHUM_REGISTRO_ENCONTRADO);
+	}
 }
 
 // ---------------- Exibição dos arquivos de dados ----------------
@@ -1205,3 +1297,7 @@ void set_arquivo_treinador_possui_bolsomon(char* novos_dados, size_t tamanho){
 
 // ---------------- Implementação das suas próprias funções auxiliares ----------------
 
+// Função auxiliar para o qsort de strings (usada em listar_treinadores_bolsomons_menu)
+int qsort_string_cmp(const void *a, const void *b) {
+    return strcmp((const char*)a, (const char*)b);
+}
