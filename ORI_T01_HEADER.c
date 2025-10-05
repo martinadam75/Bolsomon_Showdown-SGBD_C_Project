@@ -1174,8 +1174,30 @@ void imprimir_treinador_bolsomons_primario_idx_menu() {
 // ---------------- Liberação de espaço e memória ----------------
 
 void liberar_espaco_menu() {
-	/*IMPLEMENTE A FUNÇÃO AQUI*/
-	printf(ERRO_NAO_IMPLEMENTADO, "liberar_espaco_menu()");
+	// Cria um buffer temporário para o novo "arquivo" limpo.
+	char temp_arquivo[TAM_ARQUIVO_TREINADORES];
+	unsigned novo_qtd = 0;
+
+	// Para manter a ordem original, precisamos varrer o arquivo original.
+	for (unsigned i = 0; i < qtd_registros_treinadores; i++) {
+		// Pega o registro diretamente do arquivo original.
+		char* registro_atual = ARQUIVO_TREINADORES + i * TAM_REGISTRO_TREINADOR;
+
+		// Se o registro NÃO estiver marcado como removido copia ele para o arquivo temporário na nova posição.
+		if (strncmp(registro_atual, "*|", 2) != 0) {
+			strncpy(temp_arquivo + novo_qtd * TAM_REGISTRO_TREINADOR, registro_atual, TAM_REGISTRO_TREINADOR);
+			novo_qtd++;
+		}
+	}
+
+	// Substitui o arquivo antigo pelo novo.
+	memcpy(ARQUIVO_TREINADORES, temp_arquivo, novo_qtd * TAM_REGISTRO_TREINADOR);
+	qtd_registros_treinadores = novo_qtd;
+
+	// Reconstrói o índice do zero, pois os RRNs mudaram.
+	criar_treinadores_idx();
+
+	printf(SUCESSO);
 }
 
 void liberar_memoria_menu() {
