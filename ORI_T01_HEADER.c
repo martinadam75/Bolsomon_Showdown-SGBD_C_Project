@@ -18,10 +18,9 @@
 
 // Defina aqui protótipos de funções auxiliares e macros (se quiser)
 
-// Função auxiliar para o qsort de strings (usada em listar_treinadores_bolsomons_menu)
-int qsort_string_cmp(const void *a, const void *b) {
-    return strcmp((const char*)a, (const char*)b);
-}
+void copiar_e_converter_para_maiusculo(char *destino, const char *origem);
+void reconstruir_treinadores_idx();
+int qsort_string_cmp(const void *a, const void *b); 
 
 
 // Arquivos de dados
@@ -152,24 +151,6 @@ int qsort_inverted_list_primary_search(const void *a, const void *b) {
 }
 
 // ---------------- Criação do índice respectivo ----------------
-
-//Função para reconstruir o índice de treinadores
-void reconstruir_treinadores_idx() {
-    if(!treinadores_idx) {
-        treinadores_idx = malloc(MAX_REGISTROS * sizeof(treinadores_index));
-        if(!treinadores_idx) {
-            printf(ERRO_MEMORIA_INSUFICIENTE);
-            exit(1);
-        }
-    }
-
-    for(unsigned i = 0; i < qtd_registros_treinadores; i++) {
-        Treinador t = recuperar_registro_treinador(i);
-        treinadores_idx[i].rrn = (strncmp(t.id_treinador, "*|", 2)) ? i : -1;
-        strcpy(treinadores_idx[i].id_treinador, t.id_treinador);
-    }
-    qsort(treinadores_idx, qtd_registros_treinadores, sizeof(treinadores_index), qsort_treinadores_idx);
-}
 
 void criar_treinadores_idx() {
     reconstruir_treinadores_idx();
@@ -628,7 +609,7 @@ void cadastrar_bolsomon_menu(char *nome, char *habilidade, double preco) {
 	// Geração do novo ID.
 	unsigned new_id_int = qtd_registros_bolsomons;
 	char new_id_str[TAM_ID_BOLSOMON];
-	sprintf(new_id_str, "%03u", new_id_int); // Formata como string de 3 dígitos (ex: "007").
+	sprintf(new_id_str, "%03u", new_id_int); // Formata como string de 3 dí­gitos (ex: "007").
 
 	// Preparação do novo registro de bolsomon.
 	Bolsomon b;
@@ -799,14 +780,23 @@ void executar_batalha_menu(char *inicio, char *duracao, char *arena, char *id_tr
 	}
 
 	// --- Determinação dos vencedores de cada categoria ---
-	int idx_maior_duracao = 0, idx_mais_derrotas = 0, idx_mais_dano = 0;
+	int idx_maior_duracao = 0;
+	int idx_mais_derrotas = 0;
+	int idx_mais_dano = 0;
+
 	for (int i = 1; i < QTD_MAX_TREINADORES; i++) {
-		if (participantes[i].duracao_segundos > participantes[idx_maior_duracao].duracao_segundos)
+		// Encontra o índice do participante com a maior duração
+		if (participantes[i].duracao_segundos > participantes[idx_maior_duracao].duracao_segundos) {
 			idx_maior_duracao = i;
-		if (participantes[i].eliminacoes > participantes[idx_mais_derrotas].eliminacoes)
+		}
+		// Encontra o índice do participante com mais derrotas
+		if (participantes[i].eliminacoes > participantes[idx_mais_derrotas].eliminacoes) {
 			idx_mais_derrotas = i;
-		if (participantes[i].danos > participantes[idx_mais_dano].danos)
+		}
+		// Encontra o índice do participante com mais dano
+		if (participantes[i].danos > participantes[idx_mais_dano].danos) {
 			idx_mais_dano = i;
+		}
 	}
 
 	// --- Inserção da Batalha ---
@@ -999,20 +989,20 @@ void listar_treinadores_id_menu() {
 void listar_treinadores_bolsomons_menu(char *bolsomon){
 	int primeiro_indice_primario;
 
+	char chave_maiuscula[TAM_MAX_NOME_BOLSOMON];
+	copiar_e_converter_para_maiusculo(chave_maiuscula, bolsomon);
+
 	// Busca na lista invertida pelo nome do bolsomon
-	bool found = inverted_list_secondary_search(&primeiro_indice_primario, true, bolsomon, &treinador_bolsomons_idx);
+	bool found = inverted_list_secondary_search(&primeiro_indice_primario, true, chave_maiuscula, &treinador_bolsomons_idx);
 	
 	if (!found) {
-		// Se a busca secundária não encontrar o bolsomon, verifica se há algum registro antes de imprimir o aviso.
-		if (treinador_bolsomons_idx.qtd_registros_secundario == 0) {
-			printf(AVISO_NENHUM_REGISTRO_ENCONTRADO);
-		}
-		return;
-	}
+        printf(AVISO_NENHUM_REGISTRO_ENCONTRADO);
+        return;
+    }
 
 	// Recupera a lista de IDs de treinadores do índice primário.
 	char ids_encontrados[MAX_REGISTROS][TAM_CHAVE_TREINADOR_BOLSOMON_PRIMARIO_IDX];
-	int qtd_ids = inverted_list_primary_search(ids_encontrados, false, primeiro_indice_primario, NULL, &treinador_bolsomons_idx);
+	int qtd_ids = inverted_list_primary_search(ids_encontrados, true, primeiro_indice_primario, NULL, &treinador_bolsomons_idx);
 
 	if (qtd_ids == 0) {
 		printf(AVISO_NENHUM_REGISTRO_ENCONTRADO);
@@ -1024,14 +1014,14 @@ void listar_treinadores_bolsomons_menu(char *bolsomon){
 
 	// Para cada ID ordenado, busca o registro completo do treinador e o exibe.
 	for (int i = 0; i < qtd_ids; i++) {
-		treinadores_index key_t;
-		strcpy(key_t.id_treinador, ids_encontrados[i]);
-		int found_t_idx = busca_binaria(&key_t, treinadores_idx, qtd_registros_treinadores, sizeof(treinadores_index), qsort_treinadores_idx, false, 0);
-		
-		if (found_t_idx != -1 && treinadores_idx[found_t_idx].rrn != -1) {
-			exibir_treinador(treinadores_idx[found_t_idx].rrn);
-		}
-	}
+        treinadores_index key_t;
+        strcpy(key_t.id_treinador, ids_encontrados[i]);
+        int found_t_idx = busca_binaria(&key_t, treinadores_idx, qtd_registros_treinadores, sizeof(treinadores_index), qsort_treinadores_idx, false, 0);
+
+        if (found_t_idx != -1 && treinadores_idx[found_t_idx].rrn != -1) {
+            exibir_treinador(treinadores_idx[found_t_idx].rrn);
+        }
+    }
 }
 
 void listar_bolsomons_compra_menu(char *id_treinador) {
@@ -1050,12 +1040,12 @@ void listar_bolsomons_compra_menu(char *id_treinador) {
 	// Itera sobre o índice de preços (que está ordenado do mais barato para o mais caro).
 	bool encontrou_algum = false;
 	for (unsigned i = 0; i < qtd_registros_bolsomons; i++) {
-		// Se o preço do bolsomon atual já for maior que o saldo, a busca é interrompida.
+		// Se o preços do bolsomon atual já for maior que o saldo, a busca é interrompida.
 		if (preco_bolsomon_idx[i].preco_bolsobolas > saldo) {
 			break;
 		}
 
-		// O bolsomon é comprável. Precisamos buscar seu RRN para poder exibi-lo.
+		// O bolsomon é comprável. Precisamos buscar seu RRN para poder exibí-lo.
 		bolsomons_index key_b;
 		strcpy(key_b.id_bolsomon, preco_bolsomon_idx[i].id_bolsomon);
 		int found_b_idx = busca_binaria(&key_b, bolsomons_idx, qtd_registros_bolsomons, sizeof(bolsomons_index), qsort_bolsomons_idx, false, 0);
@@ -1207,7 +1197,7 @@ void imprimir_data_idx_menu() {
         return;
     }
 	for(unsigned i = 0; i < qtd_registros_batalhas; i++)
-		printf("%s, %s\n", data_idx[i].inicio, data_idx[i].id_batalha);
+		printf("%s, %s\n", data_idx[i].id_batalha, data_idx[i].inicio);
 }
 
 void imprimir_treinador_bolsomons_secundario_idx_menu() {
@@ -1242,7 +1232,7 @@ void liberar_espaco_menu() {
 		// Pega o registro diretamente do arquivo original.
 		char* registro_atual = ARQUIVO_TREINADORES + i * TAM_REGISTRO_TREINADOR;
 
-		// Se o registro NÃO estiver marcado como removido copia ele para o arquivo temporário na nova posição.
+		// Se o registro não estiver marcado como removido copia ele para o arquivo temporário na nova posição.
 		if (strncmp(registro_atual, "*|", 2) != 0) {
 			memcpy(temp_arquivo + novo_qtd * TAM_REGISTRO_TREINADOR, registro_atual, TAM_REGISTRO_TREINADOR);
             novo_qtd++;
@@ -1276,18 +1266,22 @@ void liberar_memoria_menu() {
 // ---------------- Manipulação da lista invertida ----------------
 
 void inverted_list_insert(char *chave_secundaria, char *chave_primaria, inverted_list *t) {
+
+	char chave_sec_maiuscula[TAM_MAX_NOME_BOLSOMON];
+	copiar_e_converter_para_maiusculo(chave_sec_maiuscula, chave_secundaria);
+
 	int sec_idx = -1;
 
 	// Busca linear pela chave secundária (nome do bolsomon), pois o índice ainda não está ordenado.
 	for (unsigned i = 0; i < t->qtd_registros_secundario; ++i) {
-		if (strcmp(t->treinador_bolsomons_secundario_idx[i].chave_secundaria, chave_secundaria) == 0) {
-			sec_idx = i;
-			break;
-		}
-	}
+        if (strcmp(t->treinador_bolsomons_secundario_idx[i].chave_secundaria, chave_sec_maiuscula) == 0) {
+            sec_idx = i;
+            break;
+        }
+    }
 
 
-	// --- Caso 1: A chave secundária (nome) NÃO existe. ---
+	// --- Caso 1: A chave secundária (nome) não existe. ---
 	if (sec_idx == -1) { 
 
 		// Adiciona a chave primária (id_treinador) ao final do índice primário.
@@ -1296,9 +1290,9 @@ void inverted_list_insert(char *chave_secundaria, char *chave_primaria, inverted
 		t->treinador_bolsomons_primario_idx[new_primary_idx].proximo_indice = -1; // É o fim da lista.
 		t->qtd_registros_primario++;
 
-		// Adiciona a chave secundária (nome) ao final do índice secundário.
+		// Adiciona a chave secundária (nome) ao final do í­ndice secundário.
 		int new_secondary_idx = t->qtd_registros_secundario;
-		strcpy(t->treinador_bolsomons_secundario_idx[new_secondary_idx].chave_secundaria, chave_secundaria);
+		strcpy(t->treinador_bolsomons_secundario_idx[new_secondary_idx].chave_secundaria, chave_sec_maiuscula);
 		// Aponta para o registro primário que acabamos de criar.
 		t->treinador_bolsomons_secundario_idx[new_secondary_idx].primeiro_indice = new_primary_idx;
 		t->qtd_registros_secundario++;
@@ -1346,14 +1340,27 @@ bool inverted_list_secondary_search(int *result, bool exibir_caminho, char *chav
 }
 
 int inverted_list_primary_search(char result[][TAM_CHAVE_TREINADOR_BOLSOMON_PRIMARIO_IDX], bool exibir_caminho, int indice, int *indice_final, inverted_list *t) {
-	int count = 0;
-	int current_idx = indice;
+    int count = 0;
+    int current_idx = indice;
 
-	// Percorre a "lista encadeada" no índice primário.
+    // Buffer para o caminho
+    char *path_buffer = NULL;
+    if (exibir_caminho) {
+        path_buffer = malloc(t->qtd_registros_primario * 6 + 1);
+        if(path_buffer) path_buffer[0] = '\0'; else exibir_caminho = false;
+    }
+
+    // Percorre a "lista encadeada" no índice primário.
 	while (current_idx != -1) {
+		// Adiciona o índice atual ao caminho, se necessário.
+		if (exibir_caminho && path_buffer) {
+            char idx_str[7];
+            sprintf(idx_str, " %d", current_idx);
+            strcat(path_buffer, idx_str);
+        }
+
 		if (result) {
-			// Copia a chave encontrada para o vetor de resultados.
-			strcpy(result[count], t->treinador_bolsomons_primario_idx[current_idx].chave_primaria);
+        	strcpy(result[count], t->treinador_bolsomons_primario_idx[current_idx].chave_primaria);
 		}
 
 		if (indice_final) {
@@ -1362,9 +1369,13 @@ int inverted_list_primary_search(char result[][TAM_CHAVE_TREINADOR_BOLSOMON_PRIM
 		}
 		
 		count++;
-		// Pula para o próximo elemento da lista.
-		current_idx = t->treinador_bolsomons_primario_idx[current_idx].proximo_indice;
+        current_idx = t->treinador_bolsomons_primario_idx[current_idx].proximo_indice;
 	}
+
+	if (exibir_caminho && path_buffer) {
+        printf("%s%s\n", REGS_PERCORRIDOS, path_buffer);
+    }
+    if (path_buffer) free(path_buffer);
 
 	return count; // Retorna o número de chaves encontradas.
 }
@@ -1470,3 +1481,32 @@ void set_arquivo_treinador_possui_bolsomon(char* novos_dados, size_t tamanho){
 }
 
 // ---------------- Implementação das suas próprias funções auxiliares ----------------
+
+// Função auxiliar para o qsort de strings (usada em listar_treinadores_bolsomons_menu)
+int qsort_string_cmp(const void *a, const void *b) {
+    return strcmp((const char*)a, (const char*)b);
+}
+
+/* Copia uma string de origem para um destino e a converte para maiúsculas. */
+void copiar_e_converter_para_maiusculo(char *destino, const char *origem) {
+    strcpy(destino, origem);
+    strupr(destino);
+}
+
+//Função para reconstruir o índice de treinadores
+void reconstruir_treinadores_idx() {
+    if(!treinadores_idx) {
+        treinadores_idx = malloc(MAX_REGISTROS * sizeof(treinadores_index));
+        if(!treinadores_idx) {
+            printf(ERRO_MEMORIA_INSUFICIENTE);
+            exit(1);
+        }
+    }
+
+    for(unsigned i = 0; i < qtd_registros_treinadores; i++) {
+        Treinador t = recuperar_registro_treinador(i);
+        treinadores_idx[i].rrn = (strncmp(t.id_treinador, "*|", 2)) ? i : -1;
+        strcpy(treinadores_idx[i].id_treinador, t.id_treinador);
+    }
+    qsort(treinadores_idx, qtd_registros_treinadores, sizeof(treinadores_index), qsort_treinadores_idx);
+}
