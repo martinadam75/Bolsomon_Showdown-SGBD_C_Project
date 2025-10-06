@@ -1,0 +1,11 @@
+INSERT INTO treinadores VALUES ('91230842311', 'Wallksss');
+INSERT INTO treinadores VALUES ('59932519774', 'Nowon');
+INSERT INTO treinadores VALUES ('91004621999', 'TheGhost');
+INSERT INTO treinadores VALUES ('91230842311', 'LorenGC');
+UPDATE treinadores SET bolsobolas = bolsobolas + '830.50' WHERE id_treinador = '59932519774';
+UPDATE treinadores SET bolsobolas = bolsobolas + '1032.33' WHERE id_treinador = '53871682559';
+UPDATE treinadores SET bolsobolas = bolsobolas + '-621.00' WHERE id_treinador = '59932519774';
+echo file ARQUIVO_TREINADORES
+SELECT * FROM treinadores ORDER BY id_treinador ASC;
+q
+

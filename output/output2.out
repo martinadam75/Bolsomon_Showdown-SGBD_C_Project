@@ -1,0 +1,45 @@
+Indice treinadores_idx criado com sucesso!
+Indice bolsomons_idx criado com sucesso!
+Indice batalhas_idx criado com sucesso!
+Indice resultados_idx criado com sucesso!
+Indice preco_bolsomon_idx criado com sucesso!
+Indice treinador_bolsomons_idx criado com sucesso!
+Indice treinador_possui_bolsomon_idx criado com sucesso!
+Indice data_idx criado com sucesso!
+INSERT INTO treinadores VALUES ('91230842311', 'Wallksss');
+OK
+INSERT INTO treinadores VALUES ('59932519774', 'Nowon');
+OK
+INSERT INTO treinadores VALUES ('91004621999', 'TheGhost');
+OK
+INSERT INTO treinadores VALUES ('83201183822', 'LorenGC');
+OK
+INSERT INTO bolsomons VALUES ('Bolsosaur', 'Ataque de Vinhas', '1280.00');
+OK
+INSERT INTO bolsomons VALUES ('Patu', 'Barreira', '450.75');
+OK
+INSERT INTO bolsomons VALUES ('Ilson', 'Canhao de agua', '6800.90');
+OK
+SELECT * FROM treinadores ORDER BY id_treinador ASC;
+59932519774, Nowon, 202103260628, 000000000000, 0.00
+83201183822, LorenGC, 202104070013, 000000000000, 0.00
+91004621999, TheGhost, 202104041659, 000000000000, 0.00
+91230842311, Wallksss, 202103181430, 000000000000, 0.00
+echo file ARQUIVO_TREINADORES
+91230842311;Wallksss;202103181430;000000000000;0000000000.00;###################################59932519774;Nowon;202103260628;000000000000;0000000000.00;######################################91004621999;TheGhost;202104041659;000000000000;0000000000.00;###################################83201183822;LorenGC;202104070013;000000000000;0000000000.00;####################################
+echo index treinadores_idx
+59932519774, 1
+83201183822, 3
+91004621999, 2
+91230842311, 0
+echo file ARQUIVO_BOLSOMONS
+000;Bolsosaur;Ataque de Vinhas;0000001280.00;#######################################################001;Patu;Barreira;0000000450.75;####################################################################002;Ilson;Canhao de agua;0000006800.90;#############################################################
+echo index bolsomons_idx
+000, 0
+001, 1
+002, 2
+echo index preco_bolsomon_idx
+450.75, 001
+1280.00, 000
+6800.90, 002
+q

@@ -1,0 +1,15 @@
+INSERT INTO treinadores VALUES ('91230842311', 'Wallksss');
+INSERT INTO treinadores VALUES ('59932519774', 'Nowon');
+INSERT INTO treinadores VALUES ('91004621999', 'TheGhost');
+INSERT INTO treinadores VALUES ('83201183822', 'LorenGC');
+INSERT INTO bolsomons VALUES ('Bolsosaur', 'Ataque de Vinhas', '1280.00');
+INSERT INTO bolsomons VALUES ('Patu', 'Barreira', '450.75');
+INSERT INTO bolsomons VALUES ('Ilson', 'Canhao de agua', '6800.90');
+SELECT * FROM treinadores ORDER BY id_treinador ASC;
+echo file ARQUIVO_TREINADORES
+echo index treinadores_idx
+echo file ARQUIVO_BOLSOMONS
+echo index bolsomons_idx
+echo index preco_bolsomon_idx
+q
+

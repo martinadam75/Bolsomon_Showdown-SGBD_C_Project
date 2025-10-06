@@ -41,8 +41,8 @@ time_t epoch;
 
 #define TIME_MAX                2147483647L
 
-long _dstbias = 0;                  // Offset for Daylight Saving Time
-long _timezone = 0;                 // Difference in seconds between GMT and local time
+long utils_dstbias = 0;             // Offset for Daylight Saving Time
+long utils_timezone = 0;            // Difference in seconds between GMT and local time
 
 const int _ytab[2][12] = {
 	{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
@@ -85,7 +85,7 @@ void new_uuid(char buffer[37]) {
 	uint64_t r1 = prng_rand();
 	uint64_t r2 = prng_rand();
 
-	sprintf(buffer, "%08x-%04x-%04lx-%04lx-%012lx", (uint32_t)(r1 >> 32), (uint16_t)(r1 >> 16), 0x4000 | (r1 & 0x0fff), 0x8000 | (r2 & 0x3fff), r2 >> 16);
+	sprintf(buffer, "%08x-%04x-%04llx-%04llx-%012llx", (uint32_t)(r1 >> 32), (uint16_t)(r1 >> 16), (long long)(0x4000 | (r1 & 0x0fff)), (long long)(0x8000 | (r2 & 0x3fff)), (long long)(r2 >> 16));
 }
 
 /* Funções de manipulação de data */
@@ -214,10 +214,10 @@ time_t mktime(struct tm *tmbuf) {
 		((_timezone < 0) && (seconds < -_timezone))) {
 		overflow++;
 		}
-		seconds += _timezone;
+		seconds += utils_timezone;
 
 	if (tmbuf->tm_isdst) {
-		dst = _dstbias;
+		dst = utils_dstbias;
 	} else {
 		dst = 0;
 	}

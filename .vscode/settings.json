@@ -1,0 +1,6 @@
+{
+    "makefile.configureOnOpen": true,
+    "files.associations": {
+        "ori_t01_header.h": "c"
+    }
+}

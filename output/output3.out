@@ -1,0 +1,149 @@
+Indice treinadores_idx criado com sucesso!
+Indice bolsomons_idx criado com sucesso!
+Indice batalhas_idx criado com sucesso!
+Indice resultados_idx criado com sucesso!
+Indice preco_bolsomon_idx criado com sucesso!
+Indice treinador_bolsomons_idx criado com sucesso!
+Indice treinador_possui_bolsomon_idx criado com sucesso!
+Indice data_idx criado com sucesso!
+INSERT INTO treinadores VALUES ('91230842311', 'Wallksss');
+OK
+INSERT INTO treinadores VALUES ('59932519774', 'Nowon');
+OK
+INSERT INTO treinadores VALUES ('91004621999', 'TheGhost');
+OK
+INSERT INTO treinadores VALUES ('91230842311', 'LorenGc');
+ERRO: Ja existe um registro com a chave 91230842311
+INSERT INTO treinadores VALUES ('51004621955', 'PlayTs');
+OK
+INSERT INTO treinadores VALUES ('72839562301', 'Maximus');
+OK
+INSERT INTO treinadores VALUES ('83920564723', 'Nanis');
+OK
+INSERT INTO treinadores VALUES ('91230562845', 'Texugo');
+OK
+INSERT INTO treinadores VALUES ('67392034567', 'BrumKs');
+OK
+INSERT INTO treinadores VALUES ('59320481235', 'Aps');
+OK
+INSERT INTO treinadores VALUES ('83920491234', 'Bagi');
+OK
+INSERT INTO treinadores VALUES ('72849561234', 'Portz');
+OK
+INSERT INTO treinadores VALUES ('93804621236', 'MaximusJr');
+OK
+INSERT INTO bolsomons VALUES ('Bolsosaur', 'Ataque de Vinhas', '1280.00');
+OK
+INSERT INTO bolsomons VALUES ('Patu', 'Barreira', '450.75');
+OK
+INSERT INTO bolsomons VALUES ('Ilson', 'Canhao de agua', '6800.90');
+OK
+INSERT INTO bolsomons VALUES ('Pescachu', 'Choque do trovao', '800.00');
+OK
+INSERT INTO bolsomons VALUES ('Lagarteza', 'Camuflar', '150.50');
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '1300.00' WHERE id_treinador = '91230842311';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '2500.50' WHERE id_treinador = '59932519774';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '1000.00' WHERE id_treinador = '91004621999';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '500.99' WHERE id_treinador = '58932519774';
+ERRO: Registro nao encontrado
+UPDATE treinadores SET bolsobolas = bolsobolas + '2100.00' WHERE id_treinador = '93804621236';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '4500.50' WHERE id_treinador = '51004621955';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '1200.00' WHERE id_treinador = '72839562301';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '590.99' WHERE id_treinador = '83920564723';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '1200.00' WHERE id_treinador = '91230562845';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '2000.00' WHERE id_treinador = '67392034567';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '1275.00' WHERE id_treinador = '59320481235';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '553.99' WHERE id_treinador = '83920491234';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '4444.44' WHERE id_treinador = '72849561234';
+OK
+INSERT INTO treinador_possui_bolsomon VALUES ('91230842311', '000');
+OK
+INSERT INTO treinador_possui_bolsomon VALUES ('59932519774', '001');
+OK
+INSERT INTO treinador_possui_bolsomon VALUES ('91004621999', '003');
+OK
+INSERT INTO treinador_possui_bolsomon VALUES ('93804621236', '004');
+OK
+INSERT INTO treinador_possui_bolsomon VALUES ('51004621955', '000');
+OK
+INSERT INTO treinador_possui_bolsomon VALUES ('72839562301', '001');
+OK
+INSERT INTO batalhas VALUES ('202509031020', '012045', '0001', '912308423115993251977491004621999938046212365100462195572839562301839205647239123056284567392034567593204812358392049123472849561234', '000001003004000001001001003004001001', '012045004020003210010530004550005500011020001015000530000210010220002340', '000300010000000200010000000000010002000100000000', '012345670089123400567890000123450678901200345678');
+ERRO: O treinador 83920564723 nao possui o bolsomon Patu
+SELECT * FROM treinadores WHERE id_treinador = '93804621236';
+Registros percorridos: 6 9 11
+93804621236, MaximusJr, 202106041528, 000000000000, 1949.50
+SELECT * FROM treinadores WHERE id_treinador = '72428989929';
+Registros percorridos: 6 3 5 4
+ERRO: Registro nao encontrado
+SELECT * FROM batalhas WHERE id_batalha = '00000000';
+Registros percorridos:
+ERRO: Registro nao encontrado
+SELECT * FROM treinadores ORDER BY id_treinador ASC;
+51004621955, PlayTs, 202104150517, 000000000000, 3220.50
+59320481235, Aps, 202105181037, 000000000000, 1275.00
+59932519774, Nowon, 202103260628, 000000000000, 2049.75
+67392034567, BrumKs, 202105180844, 000000000000, 2000.00
+72839562301, Maximus, 202104231820, 000000000000, 749.25
+72849561234, Portz, 202105291608, 000000000000, 4444.44
+83920491234, Bagi, 202105271846, 000000000000, 553.99
+83920564723, Nanis, 202105011620, 000000000000, 590.99
+91004621999, TheGhost, 202104041659, 000000000000, 200.00
+91230562845, Texugo, 202105082153, 000000000000, 1200.00
+91230842311, Wallksss, 202103181430, 000000000000, 20.00
+93804621236, MaximusJr, 202106041528, 000000000000, 1949.50
+echo file ARQUIVO_TREINADORES
+91230842311;Wallksss;202103181430;000000000000;0000000020.00;###################################59932519774;Nowon;202103260628;000000000000;0000002049.75;######################################91004621999;TheGhost;202104041659;000000000000;0000000200.00;###################################51004621955;PlayTs;202104150517;000000000000;0000003220.50;#####################################72839562301;Maximus;202104231820;000000000000;0000000749.25;####################################83920564723;Nanis;202105011620;000000000000;0000000590.99;######################################91230562845;Texugo;202105082153;000000000000;0000001200.00;#####################################67392034567;BrumKs;202105180844;000000000000;0000002000.00;#####################################59320481235;Aps;202105181037;000000000000;0000001275.00;########################################83920491234;Bagi;202105271846;000000000000;0000000553.99;#######################################72849561234;Portz;202105291608;000000000000;0000004444.44;######################################93804621236;MaximusJr;202106041528;000000000000;0000001949.50;##################################
+echo index treinadores_idx
+51004621955, 3
+59320481235, 8
+59932519774, 1
+67392034567, 7
+72839562301, 4
+72849561234, 10
+83920491234, 9
+83920564723, 5
+91004621999, 2
+91230562845, 6
+91230842311, 0
+93804621236, 11
+echo file ARQUIVO_BOLSOMONS
+000;Bolsosaur;Ataque de Vinhas;0000001280.00;#######################################################001;Patu;Barreira;0000000450.75;####################################################################002;Ilson;Canhao de agua;0000006800.90;#############################################################003;Pescachu;Choque do trovao;0000000800.00;########################################################004;Lagarteza;Camuflar;0000000150.50;###############################################################
+echo index bolsomons_idx
+000, 0
+001, 1
+002, 2
+003, 3
+004, 4
+echo index preco_bolsomon_idx
+150.50, 004
+450.75, 001
+800.00, 003
+1280.00, 000
+6800.90, 002
+echo file ARQUIVO_BATALHAS
+ERRO: Arquivo vazio
+echo index batalhas_idx
+ERRO: Arquivo vazio
+echo file ARQUIVO_TREINADOR_POSSUI_BOLSOMON
+912308423110005993251977400191004621999003938046212360045100462195500072839562301001
+echo index treinador_possui_bolsomon_idx
+51004621955, 000, 4
+59932519774, 001, 1
+72839562301, 001, 5
+91004621999, 003, 2
+91230842311, 000, 0
+93804621236, 004, 3
+q

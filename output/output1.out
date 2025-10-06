@@ -1,0 +1,29 @@
+Indice treinadores_idx criado com sucesso!
+Indice bolsomons_idx criado com sucesso!
+Indice batalhas_idx criado com sucesso!
+Indice resultados_idx criado com sucesso!
+Indice preco_bolsomon_idx criado com sucesso!
+Indice treinador_bolsomons_idx criado com sucesso!
+Indice treinador_possui_bolsomon_idx criado com sucesso!
+Indice data_idx criado com sucesso!
+INSERT INTO treinadores VALUES ('91230842311', 'Wallksss');
+OK
+INSERT INTO treinadores VALUES ('59932519774', 'Nowon');
+OK
+INSERT INTO treinadores VALUES ('91004621999', 'TheGhost');
+OK
+INSERT INTO treinadores VALUES ('91230842311', 'LorenGC');
+ERRO: Ja existe um registro com a chave 91230842311
+UPDATE treinadores SET bolsobolas = bolsobolas + '830.50' WHERE id_treinador = '59932519774';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '1032.33' WHERE id_treinador = '53871682559';
+ERRO: Registro nao encontrado
+UPDATE treinadores SET bolsobolas = bolsobolas + '-621.00' WHERE id_treinador = '59932519774';
+ERRO: Valor invalido
+echo file ARQUIVO_TREINADORES
+91230842311;Wallksss;202103181430;000000000000;0000000000.00;###################################59932519774;Nowon;202103260628;000000000000;0000000830.50;######################################91004621999;TheGhost;202104041659;000000000000;0000000000.00;###################################
+SELECT * FROM treinadores ORDER BY id_treinador ASC;
+59932519774, Nowon, 202103260628, 000000000000, 830.50
+91004621999, TheGhost, 202104041659, 000000000000, 0.00
+91230842311, Wallksss, 202103181430, 000000000000, 0.00
+q

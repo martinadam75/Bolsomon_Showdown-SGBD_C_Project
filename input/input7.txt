@@ -1,0 +1,25 @@
+INSERT INTO treinadores VALUES ('91230842311', 'Wallksss');
+INSERT INTO treinadores VALUES ('83920491234', 'Nowon');
+INSERT INTO treinadores VALUES ('91004621999', 'TheGhost');
+INSERT INTO treinadores VALUES ('91230562845', 'Portz');
+INSERT INTO treinadores VALUES ('83920564723', 'Aps');
+INSERT INTO bolsomons VALUES ('Bolsosaur', 'Ataque de Vinhas', '0.00');
+INSERT INTO bolsomons VALUES ('Patu', 'Barreira', '1487.99');
+INSERT INTO bolsomons VALUES ('Ilson', 'Canhao de agua', '3899.50');
+INSERT INTO bolsomons VALUES ('Pescachu', 'Choque do trovao', '2579.75');
+UPDATE treinadores SET bolsobolas = bolsobolas + '1721.00' WHERE id_treinador = '91004621999';
+UPDATE treinadores SET bolsobolas = bolsobolas + '6400.00' WHERE id_treinador = '91230842311';
+UPDATE treinadores SET bolsobolas = bolsobolas + '1450.75' WHERE id_treinador = '91230842311';
+UPDATE treinadores SET bolsobolas = bolsobolas + '1530.50' WHERE id_treinador = '83920564723';
+INSERT INTO treinador_possui_bolsomon VALUES ('91004621999', '001');
+INSERT INTO treinador_possui_bolsomon VALUES ('91230842311', '002');
+INSERT INTO treinador_possui_bolsomon VALUES ('91230842311', '001');
+INSERT INTO treinador_possui_bolsomon VALUES ('83920564723', '010');
+echo file ARQUIVO_TREINADORES
+echo file ARQUIVO_BOLSOMONS
+echo index treinadores_idx
+echo index bolsomons_idx
+echo index treinador_bolsomons_secundario_idx
+echo index treinador_bolsomons_primario_idx
+q
+

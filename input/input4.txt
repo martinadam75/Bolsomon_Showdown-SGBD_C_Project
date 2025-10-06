@@ -1,0 +1,17 @@
+SET ARQUIVO_TREINADORES TO '91230842311;Maximus;202509031020;202509101430;0000000000.00;####################################83920564723;Texugo;202509041200;202509061010;0000000000.00;#####################################91230562845;Nanis;202509051530;000000000000;0000000000.00;######################################';
+INSERT INTO treinadores VALUES ('93804621236', 'Wallksss');
+INSERT INTO treinadores VALUES ('57653993524', 'Nowon');
+INSERT INTO treinadores VALUES ('59932519774', 'TheGhost');
+INSERT INTO treinadores VALUES ('91004621999', 'Portz');
+UPDATE treinadores SET bolsobolas = bolsobolas + '5970.00' WHERE id_treinador = '91230842311';
+UPDATE treinadores SET bolsobolas = bolsobolas + '2423.99' WHERE id_treinador = '59932519774';
+UPDATE treinadores SET bolsobolas = bolsobolas + '-1779.50' WHERE id_treinador = '91004621999';
+echo file ARQUIVO_TREINADORES
+SELECT * FROM treinadores ORDER BY id_treinador ASC;
+DELETE FROM treinadores WHERE id_treinador = '91230842311';
+DELETE FROM treinadores WHERE id_treinador = '93804621236';
+VACUUM treinadores;
+echo file ARQUIVO_TREINADORES
+echo index treinadores_idx
+q
+

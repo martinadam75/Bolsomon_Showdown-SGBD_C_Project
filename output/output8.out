@@ -1,0 +1,112 @@
+Indice treinadores_idx criado com sucesso!
+Indice bolsomons_idx criado com sucesso!
+Indice batalhas_idx criado com sucesso!
+Indice resultados_idx criado com sucesso!
+Indice preco_bolsomon_idx criado com sucesso!
+Indice treinador_bolsomons_idx criado com sucesso!
+Indice treinador_possui_bolsomon_idx criado com sucesso!
+Indice data_idx criado com sucesso!
+INSERT INTO treinadores VALUES ('67392034567', 'Davy');
+OK
+INSERT INTO treinadores VALUES ('59320481235', 'Igor');
+OK
+INSERT INTO treinadores VALUES ('57209482376', 'Autentico');
+OK
+INSERT INTO bolsomons VALUES ('Patu', 'Barreira', '2232.75');
+OK
+INSERT INTO bolsomons VALUES ('Ilson', 'Canhao de agua', '2579.90');
+OK
+INSERT INTO bolsomons VALUES ('Jacare de osso', 'Terremoto', '12500.00');
+OK
+INSERT INTO bolsomons VALUES ('Balboa', 'Sequencia de socos', '12500.00');
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '1080.00' WHERE id_treinador = '91230842311';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '6300.50' WHERE id_treinador = '57209482376';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '2000.99' WHERE id_treinador = '91230842311';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '125.32' WHERE id_treinador = '65037521605';
+OK
+INSERT INTO treinador_possui_bolsomon VALUES ('65037521605', '000');
+ERRO: Saldo insuficiente
+INSERT INTO treinador_possui_bolsomon VALUES ('91004621999', '000');
+OK
+INSERT INTO treinador_possui_bolsomon VALUES ('91230842311', '003');
+OK
+INSERT INTO treinador_possui_bolsomon VALUES ('65037521605', '005');
+ERRO: Saldo insuficiente
+SELECT T.* FROM treinadores T INNER JOIN treinador_possui_bolsomon TPB ON T.id_treinador = TPB.id_treinador INNER JOIN bolsomons B ON TPB.id_bolsomon = B.id_bolsomon WHERE B.nome = 'Lagarteza' ORDER BY T.id_treinador;
+Registros percorridos: 1
+Registros percorridos: 0 2 3 4 5 6 7 9 10 11 12
+42714376303, BrumKs, 202411191450, 000000000000, 10.00
+51004621955, Wallksss, 202411190730, 000000000000, 3905.00
+59932519774, MaximusJr, 202411200130, 000000000000, 0.00
+65037521605, TheGhost, 202411200230, 000000000000, 125.32
+72849561234, Bagi, 202411190430, 000000000000, 800.00
+83920491234, Swayy, 202411200137, 000000000000, 500.20
+83920564723, Nino, 202411192142, 000000000000, 2050.00
+91004621999, LorenGC, 202411191430, 000000000000, 3410.00
+91230562845, Tony, 202411200245, 000000000000, 330.00
+91230842311, Nanis, 202411191430, 000000000000, 2848.24
+93804621236, Maximus, 202411200400, 000000000000, 0.00
+SELECT T.* FROM treinadores T INNER JOIN treinador_possui_bolsomon TPB ON T.id_treinador = TPB.id_treinador INNER JOIN bolsomons B ON TPB.id_bolsomon = B.id_bolsomon WHERE B.nome = 'Bolsosaur' ORDER BY T.id_treinador;
+Registros percorridos: 1 0
+Registros percorridos: 1 8 13 14
+42714376303, BrumKs, 202411191450, 000000000000, 10.00
+51004621955, Wallksss, 202411190730, 000000000000, 3905.00
+72839562301, Snarfx, 202411191737, 000000000000, 99.99
+91004621999, LorenGC, 202411191430, 000000000000, 3410.00
+SELECT T.* FROM treinadores T INNER JOIN treinador_possui_bolsomon TPB ON T.id_treinador = TPB.id_treinador INNER JOIN bolsomons B ON TPB.id_bolsomon = B.id_bolsomon WHERE B.nome = 'Balboa' ORDER BY T.id_treinador;
+Registros percorridos: 1 0
+AVISO: Nenhum registro encontrado
+echo file ARQUIVO_TREINADORES
+91230842311;Nanis;202411191430;000000000000;0000002848.24;######################################42714376303;BrumKs;202411191450;000000000000;0000000010.00;#####################################65037521605;TheGhost;202411200230;000000000000;0000000125.32;###################################93804621236;Maximus;202411200400;000000000000;0000000000.00;####################################59932519774;MaximusJr;202411200130;000000000000;0000000000.00;##################################91004621999;LorenGC;202411191430;000000000000;0000003410.00;####################################51004621955;Wallksss;202411190730;000000000000;0000003905.00;###################################72849561234;Bagi;202411190430;000000000000;0000000800.00;#######################################83920491234;Swayy;202411200137;000000000000;0000000500.20;######################################91230562845;Tony;202411200245;000000000000;0000000330.00;#######################################83920564723;Nino;202411192142;000000000000;0000002050.00;#######################################72839562301;Snarfx;202411191737;000000000000;0000000099.99;#####################################67392034567;Davy;202103181430;000000000000;0000000000.00;#######################################59320481235;Igor;202103260628;000000000000;0000000000.00;#######################################57209482376;Autentico;202104041659;000000000000;0000006300.50;##################################
+echo file ARQUIVO_BOLSOMONS
+000;Bolsosaur;Ataque de vinhas;0000000600.00;#######################################################001;Lagarteza;Camuflar;0000000150.50;###############################################################002;Pescachu;Choque do trovao;0000000800.00;########################################################003;Patu;Barreira;0000002232.75;####################################################################004;Ilson;Canhao de agua;0000002579.90;#############################################################005;Jacare de osso;Terremoto;0000012500.00;#########################################################006;Balboa;Sequencia de socos;0000012500.00;########################################################
+echo index treinadores_idx
+42714376303, 1
+51004621955, 6
+57209482376, 14
+59320481235, 13
+59932519774, 4
+65037521605, 2
+67392034567, 12
+72839562301, 11
+72849561234, 7
+83920491234, 8
+83920564723, 10
+91004621999, 5
+91230562845, 9
+91230842311, 0
+93804621236, 3
+echo index bolsomons_idx
+000, 0
+001, 1
+002, 2
+003, 3
+004, 4
+005, 5
+006, 6
+echo index treinador_bolsomons_secundario_idx
+BOLSOSAUR, 1
+LAGARTEZA, 0
+PATU, 15
+echo index treinador_bolsomons_primario_idx
+91230842311, 2
+42714376303, 8
+42714376303, 3
+65037521605, 4
+93804621236, 5
+59932519774, 6
+91004621999, 7
+51004621955, 9
+51004621955, 13
+72849561234, 10
+83920491234, 11
+91230562845, 12
+83920564723, -1
+72839562301, 14
+91004621999, -1
+91230842311, -1
+q

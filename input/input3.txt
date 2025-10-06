@@ -1,0 +1,53 @@
+INSERT INTO treinadores VALUES ('91230842311', 'Wallksss');
+INSERT INTO treinadores VALUES ('59932519774', 'Nowon');
+INSERT INTO treinadores VALUES ('91004621999', 'TheGhost');
+INSERT INTO treinadores VALUES ('91230842311', 'LorenGc');
+INSERT INTO treinadores VALUES ('51004621955', 'PlayTs');
+INSERT INTO treinadores VALUES ('72839562301', 'Maximus');
+INSERT INTO treinadores VALUES ('83920564723', 'Nanis');
+INSERT INTO treinadores VALUES ('91230562845', 'Texugo');
+INSERT INTO treinadores VALUES ('67392034567', 'BrumKs');
+INSERT INTO treinadores VALUES ('59320481235', 'Aps');
+INSERT INTO treinadores VALUES ('83920491234', 'Bagi');
+INSERT INTO treinadores VALUES ('72849561234', 'Portz');
+INSERT INTO treinadores VALUES ('93804621236', 'MaximusJr');
+INSERT INTO bolsomons VALUES ('Bolsosaur', 'Ataque de Vinhas', '1280.00');
+INSERT INTO bolsomons VALUES ('Patu', 'Barreira', '450.75');
+INSERT INTO bolsomons VALUES ('Ilson', 'Canhao de agua', '6800.90');
+INSERT INTO bolsomons VALUES ('Pescachu', 'Choque do trovao', '800.00');
+INSERT INTO bolsomons VALUES ('Lagarteza', 'Camuflar', '150.50');
+UPDATE treinadores SET bolsobolas = bolsobolas + '1300.00' WHERE id_treinador = '91230842311';
+UPDATE treinadores SET bolsobolas = bolsobolas + '2500.50' WHERE id_treinador = '59932519774';
+UPDATE treinadores SET bolsobolas = bolsobolas + '1000.00' WHERE id_treinador = '91004621999';
+UPDATE treinadores SET bolsobolas = bolsobolas + '500.99' WHERE id_treinador = '58932519774';
+UPDATE treinadores SET bolsobolas = bolsobolas + '2100.00' WHERE id_treinador = '93804621236';
+UPDATE treinadores SET bolsobolas = bolsobolas + '4500.50' WHERE id_treinador = '51004621955';
+UPDATE treinadores SET bolsobolas = bolsobolas + '1200.00' WHERE id_treinador = '72839562301';
+UPDATE treinadores SET bolsobolas = bolsobolas + '590.99' WHERE id_treinador = '83920564723';
+UPDATE treinadores SET bolsobolas = bolsobolas + '1200.00' WHERE id_treinador = '91230562845';
+UPDATE treinadores SET bolsobolas = bolsobolas + '2000.00' WHERE id_treinador = '67392034567';
+UPDATE treinadores SET bolsobolas = bolsobolas + '1275.00' WHERE id_treinador = '59320481235';
+UPDATE treinadores SET bolsobolas = bolsobolas + '553.99' WHERE id_treinador = '83920491234';
+UPDATE treinadores SET bolsobolas = bolsobolas + '4444.44' WHERE id_treinador = '72849561234';
+INSERT INTO treinador_possui_bolsomon VALUES ('91230842311', '000');
+INSERT INTO treinador_possui_bolsomon VALUES ('59932519774', '001');
+INSERT INTO treinador_possui_bolsomon VALUES ('91004621999', '003');
+INSERT INTO treinador_possui_bolsomon VALUES ('93804621236', '004');
+INSERT INTO treinador_possui_bolsomon VALUES ('51004621955', '000');
+INSERT INTO treinador_possui_bolsomon VALUES ('72839562301', '001');
+INSERT INTO batalhas VALUES ('202509031020', '012045', '0001', '912308423115993251977491004621999938046212365100462195572839562301839205647239123056284567392034567593204812358392049123472849561234', '000001003004000001001001003004001001', '012045004020003210010530004550005500011020001015000530000210010220002340', '000300010000000200010000000000010002000100000000', '012345670089123400567890000123450678901200345678');
+SELECT * FROM treinadores WHERE id_treinador = '93804621236';
+SELECT * FROM treinadores WHERE id_treinador = '72428989929';
+SELECT * FROM batalhas WHERE id_batalha = '00000000';
+SELECT * FROM treinadores ORDER BY id_treinador ASC;
+echo file ARQUIVO_TREINADORES
+echo index treinadores_idx
+echo file ARQUIVO_BOLSOMONS
+echo index bolsomons_idx
+echo index preco_bolsomon_idx
+echo file ARQUIVO_BATALHAS
+echo index batalhas_idx
+echo file ARQUIVO_TREINADOR_POSSUI_BOLSOMON
+echo index treinador_possui_bolsomon_idx
+q
+

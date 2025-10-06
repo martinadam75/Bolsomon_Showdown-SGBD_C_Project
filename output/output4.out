@@ -1,0 +1,47 @@
+Indice treinadores_idx criado com sucesso!
+Indice bolsomons_idx criado com sucesso!
+Indice batalhas_idx criado com sucesso!
+Indice resultados_idx criado com sucesso!
+Indice preco_bolsomon_idx criado com sucesso!
+Indice treinador_bolsomons_idx criado com sucesso!
+Indice treinador_possui_bolsomon_idx criado com sucesso!
+Indice data_idx criado com sucesso!
+INSERT INTO treinadores VALUES ('93804621236', 'Wallksss');
+OK
+INSERT INTO treinadores VALUES ('57653993524', 'Nowon');
+OK
+INSERT INTO treinadores VALUES ('59932519774', 'TheGhost');
+OK
+INSERT INTO treinadores VALUES ('91004621999', 'Portz');
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '5970.00' WHERE id_treinador = '91230842311';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '2423.99' WHERE id_treinador = '59932519774';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '-1779.50' WHERE id_treinador = '91004621999';
+ERRO: Valor invalido
+echo file ARQUIVO_TREINADORES
+91230842311;Maximus;202509031020;202509101430;0000005970.00;####################################83920564723;Texugo;202509041200;202509061010;0000000000.00;#####################################91230562845;Nanis;202509051530;000000000000;0000000000.00;######################################93804621236;Wallksss;202103181430;000000000000;0000000000.00;###################################57653993524;Nowon;202103260628;000000000000;0000000000.00;######################################59932519774;TheGhost;202104041659;000000000000;0000002423.99;###################################91004621999;Portz;202104070013;000000000000;0000000000.00;######################################
+SELECT * FROM treinadores ORDER BY id_treinador ASC;
+57653993524, Nowon, 202103260628, 000000000000, 0.00
+59932519774, TheGhost, 202104041659, 000000000000, 2423.99
+83920564723, Texugo, 202509041200, 202509061010, 0.00
+91004621999, Portz, 202104070013, 000000000000, 0.00
+91230562845, Nanis, 202509051530, 000000000000, 0.00
+91230842311, Maximus, 202509031020, 202509101430, 5970.00
+93804621236, Wallksss, 202103181430, 000000000000, 0.00
+DELETE FROM treinadores WHERE id_treinador = '91230842311';
+OK
+DELETE FROM treinadores WHERE id_treinador = '93804621236';
+OK
+VACUUM treinadores;
+OK
+echo file ARQUIVO_TREINADORES
+83920564723;Texugo;202509041200;202509061010;0000000000.00;#####################################91230562845;Nanis;202509051530;000000000000;0000000000.00;######################################57653993524;Nowon;202103260628;000000000000;0000000000.00;######################################59932519774;TheGhost;202104041659;000000000000;0000002423.99;###################################91004621999;Portz;202104070013;000000000000;0000000000.00;######################################
+echo index treinadores_idx
+57653993524, 2
+59932519774, 3
+83920564723, 0
+91004621999, 4
+91230562845, 1
+q

@@ -1,0 +1,65 @@
+Indice treinadores_idx criado com sucesso!
+Indice bolsomons_idx criado com sucesso!
+Indice batalhas_idx criado com sucesso!
+Indice resultados_idx criado com sucesso!
+Indice preco_bolsomon_idx criado com sucesso!
+Indice treinador_bolsomons_idx criado com sucesso!
+Indice treinador_possui_bolsomon_idx criado com sucesso!
+Indice data_idx criado com sucesso!
+INSERT INTO treinadores VALUES ('91230842311', 'Wallksss');
+OK
+INSERT INTO treinadores VALUES ('83920491234', 'Nowon');
+OK
+INSERT INTO treinadores VALUES ('91004621999', 'TheGhost');
+OK
+INSERT INTO treinadores VALUES ('91230562845', 'Portz');
+OK
+INSERT INTO treinadores VALUES ('83920564723', 'Aps');
+OK
+INSERT INTO bolsomons VALUES ('Bolsosaur', 'Ataque de Vinhas', '0.00');
+OK
+INSERT INTO bolsomons VALUES ('Patu', 'Barreira', '1487.99');
+OK
+INSERT INTO bolsomons VALUES ('Ilson', 'Canhao de agua', '3899.50');
+OK
+INSERT INTO bolsomons VALUES ('Pescachu', 'Choque do trovao', '2579.75');
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '1721.00' WHERE id_treinador = '91004621999';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '6400.00' WHERE id_treinador = '91230842311';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '1450.75' WHERE id_treinador = '91230842311';
+OK
+UPDATE treinadores SET bolsobolas = bolsobolas + '1530.50' WHERE id_treinador = '83920564723';
+OK
+INSERT INTO treinador_possui_bolsomon VALUES ('91004621999', '001');
+OK
+INSERT INTO treinador_possui_bolsomon VALUES ('91230842311', '002');
+OK
+INSERT INTO treinador_possui_bolsomon VALUES ('91230842311', '001');
+OK
+INSERT INTO treinador_possui_bolsomon VALUES ('83920564723', '010');
+ERRO: Registro nao encontrado
+echo file ARQUIVO_TREINADORES
+91230842311;Wallksss;202103181430;000000000000;0000002463.26;###################################83920491234;Nowon;202103260628;000000000000;0000000000.00;######################################91004621999;TheGhost;202104041659;000000000000;0000000233.01;###################################91230562845;Portz;202104070013;000000000000;0000000000.00;######################################83920564723;Aps;202104150517;000000000000;0000001530.50;########################################
+echo file ARQUIVO_BOLSOMONS
+000;Bolsosaur;Ataque de Vinhas;0000000000.00;#######################################################001;Patu;Barreira;0000001487.99;####################################################################002;Ilson;Canhao de agua;0000003899.50;#############################################################003;Pescachu;Choque do trovao;0000002579.75;########################################################
+echo index treinadores_idx
+83920491234, 1
+83920564723, 4
+91004621999, 2
+91230562845, 3
+91230842311, 0
+echo index bolsomons_idx
+000, 0
+001, 1
+002, 2
+003, 3
+echo index treinador_bolsomons_secundario_idx
+ILSON, 1
+PATU, 0
+echo index treinador_bolsomons_primario_idx
+91004621999, 2
+91230842311, -1
+91230842311, -1
+q
