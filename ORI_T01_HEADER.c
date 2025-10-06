@@ -20,7 +20,8 @@
 
 void copiar_e_converter_para_maiusculo(char *destino, const char *origem);
 void reconstruir_treinadores_idx();
-int qsort_string_cmp(const void *a, const void *b); 
+int qsort_string_cmp(const void *a, const void *b);
+int qsort_string_cmp_com_tamanho(const void *a, const void *b);
 
 
 // Arquivos de dados
@@ -1010,12 +1011,14 @@ void listar_treinadores_bolsomons_menu(char *bolsomon){
 	}
 
 	// Ordena os IDs de treinador recuperados
-	qsort(ids_encontrados, qtd_ids, TAM_CHAVE_TREINADOR_BOLSOMON_PRIMARIO_IDX, qsort_string_cmp);
+	qsort(ids_encontrados, qtd_ids, TAM_CHAVE_TREINADOR_BOLSOMON_PRIMARIO_IDX, qsort_string_cmp_com_tamanho);
 
 	// Para cada ID ordenado, busca o registro completo do treinador e o exibe.
 	for (int i = 0; i < qtd_ids; i++) {
         treinadores_index key_t;
-        strcpy(key_t.id_treinador, ids_encontrados[i]);
+        memcpy(key_t.id_treinador, ids_encontrados[i], TAM_CHAVE_TREINADOR_BOLSOMON_PRIMARIO_IDX);
+		key_t.id_treinador[TAM_CHAVE_TREINADOR_BOLSOMON_PRIMARIO_IDX] = '\0';
+
         int found_t_idx = busca_binaria(&key_t, treinadores_idx, qtd_registros_treinadores, sizeof(treinadores_index), qsort_treinadores_idx, false, 0);
 
         if (found_t_idx != -1 && treinadores_idx[found_t_idx].rrn != -1) {
@@ -1346,7 +1349,7 @@ int inverted_list_primary_search(char result[][TAM_CHAVE_TREINADOR_BOLSOMON_PRIM
     // Buffer para o caminho
     char *path_buffer = NULL;
     if (exibir_caminho) {
-        path_buffer = malloc(t->qtd_registros_primario * 6 + 1);
+        path_buffer = malloc(t->qtd_registros_primario * 7 + 1);
         if(path_buffer) path_buffer[0] = '\0'; else exibir_caminho = false;
     }
 
@@ -1354,13 +1357,13 @@ int inverted_list_primary_search(char result[][TAM_CHAVE_TREINADOR_BOLSOMON_PRIM
 	while (current_idx != -1) {
 		// Adiciona o índice atual ao caminho, se necessário.
 		if (exibir_caminho && path_buffer) {
-            char idx_str[7];
+            char idx_str[8];
             sprintf(idx_str, " %d", current_idx);
             strcat(path_buffer, idx_str);
         }
 
 		if (result) {
-        	strcpy(result[count], t->treinador_bolsomons_primario_idx[current_idx].chave_primaria);
+        	memcpy(result[count], t->treinador_bolsomons_primario_idx[current_idx].chave_primaria, TAM_CHAVE_TREINADOR_BOLSOMON_PRIMARIO_IDX);
 		}
 
 		if (indice_final) {
@@ -1483,6 +1486,10 @@ void set_arquivo_treinador_possui_bolsomon(char* novos_dados, size_t tamanho){
 // ---------------- Implementação das suas próprias funções auxiliares ----------------
 
 // Função auxiliar para o qsort de strings (usada em listar_treinadores_bolsomons_menu)
+int qsort_string_cmp_com_tamanho(const void *a, const void *b) {
+    return strncmp((const char*)a, (const char*)b, TAM_ID_TREINADOR - 1);
+}
+
 int qsort_string_cmp(const void *a, const void *b) {
     return strcmp((const char*)a, (const char*)b);
 }
