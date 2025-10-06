@@ -740,22 +740,33 @@ void executar_batalha_menu(char *inicio, char *duracao, char *arena, char *id_tr
 	} participantes[QTD_MAX_TREINADORES];
 
 	// --- Parse e pré-validação dos dados dos participantes ---
-	char *p_treinador = strtok(id_treinadores_str, ",");
-	char *p_bolsomon = strtok(bolsomons_treinadores_str, ",");
-	char *p_duracao = strtok(duracoes_treinadores_str, ",");
-	char *p_eliminacao = strtok(eliminacoes_treinadores_str, ",");
-	char *p_dano = strtok(danos_causados_treinadores_str, ",");
 
 	for (int i = 0; i < QTD_MAX_TREINADORES; i++) {
-		strcpy(participantes[i].id_treinador, p_treinador);
-		strcpy(participantes[i].id_bolsomon, p_bolsomon);
-		
+		// Extrai os dados de tamanho fixo das strings gigantes
+		strncpy(participantes[i].id_treinador, id_treinadores_str + i * (TAM_ID_TREINADOR - 1), TAM_ID_TREINADOR - 1);
+		participantes[i].id_treinador[TAM_ID_TREINADOR - 1] = '\0';
+
+		strncpy(participantes[i].id_bolsomon, bolsomons_treinadores_str + i * (TAM_ID_BOLSOMON - 1), TAM_ID_BOLSOMON - 1);
+		participantes[i].id_bolsomon[TAM_ID_BOLSOMON - 1] = '\0';
+
+		char duracao_str[TAM_TIME];
+		strncpy(duracao_str, duracoes_treinadores_str + i * (TAM_TIME - 1), TAM_TIME - 1);
+		duracao_str[TAM_TIME - 1] = '\0';
+
+		char eliminacoes_str[TAM_INT_NUMBER];
+		strncpy(eliminacoes_str, eliminacoes_treinadores_str + i * (TAM_INT_NUMBER-1), TAM_INT_NUMBER-1);
+		eliminacoes_str[TAM_INT_NUMBER - 1] = '\0';
+
+		char danos_str[TAM_INT_NUMBER];
+		strncpy(danos_str, danos_causados_treinadores_str + i * (TAM_INT_NUMBER - 1), TAM_INT_NUMBER - 1);
+		danos_str[TAM_INT_NUMBER - 1] = '\0';
+
+		// Converte os valores lidos
 		int h, m, s;
-		sscanf(p_duracao, "%2d%2d%2d", &h, &m, &s);
-		participantes[i].duracao_segundos = h * 3600 + m * 60 + s; // Converte para segundos para facilitar a comparação
-		
-		participantes[i].eliminacoes = atoi(p_eliminacao);
-		participantes[i].danos = atoi(p_dano);
+		sscanf(duracao_str, "%2d%2d%2d", &h, &m, &s);
+		participantes[i].duracao_segundos = h * 3600 + m * 60 + s;
+		participantes[i].eliminacoes = atoi(eliminacoes_str);
+		participantes[i].danos = atoi(danos_str);
 
 		// Validações de integridade
 		// a) O treinador existe e não foi removido?
@@ -773,16 +784,16 @@ void executar_batalha_menu(char *inicio, char *duracao, char *arena, char *id_tr
 		strcpy(key_tpb.id_bolsomon, participantes[i].id_bolsomon);
 		int found_tpb_idx = busca_binaria(&key_tpb, treinador_possui_bolsomon_idx, qtd_registros_treinador_possui_bolsomon, sizeof(treinador_possui_bolsomon_index), qsort_treinador_possui_bolsomon_idx, false, 0);
 		if (found_tpb_idx == -1) {
-			printf(ERRO_TREINADOR_BOLSOMON, participantes[i].id_treinador, participantes[i].id_bolsomon);
+			bolsomons_index key_b;
+			strcpy(key_b.id_bolsomon, participantes[i].id_bolsomon);
+			int found_b_idx = busca_binaria(&key_b, bolsomons_idx, qtd_registros_bolsomons, sizeof(bolsomons_index), qsort_bolsomons_idx, false, 0);
+			Bolsomon b = recuperar_registro_bolsomon(bolsomons_idx[found_b_idx].rrn);
+
+			printf(ERRO_TREINADOR_BOLSOMON, participantes[i].id_treinador, b.nome);
 			return;
 		}
 
 		// Avança para os próximos tokens nas strings.
-		p_treinador = strtok(NULL, ",");
-		p_bolsomon = strtok(NULL, ",");
-		p_duracao = strtok(NULL, ",");
-		p_eliminacao = strtok(NULL, ",");
-		p_dano = strtok(NULL, ",");
 	}
 
 	// --- Determinação dos vencedores de cada categoria ---
@@ -1406,7 +1417,7 @@ int busca_binaria(const void *key, const void *base0, size_t nmemb, size_t size,
 	}
 	
 	if (exibir_caminho) {
-		printf("%s:%s\n", REGS_PERCORRIDOS, path_buffer);
+		printf("%s%s\n", REGS_PERCORRIDOS, path_buffer);
 	}
 
 	if (found_idx != -1) {
