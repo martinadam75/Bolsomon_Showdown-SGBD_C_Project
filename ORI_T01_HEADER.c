@@ -18,6 +18,11 @@
 
 // Defina aqui protótipos de funções auxiliares e macros (se quiser)
 
+// Função auxiliar para o qsort de strings (usada em listar_treinadores_bolsomons_menu)
+int qsort_string_cmp(const void *a, const void *b) {
+    return strcmp((const char*)a, (const char*)b);
+}
+
 
 // Arquivos de dados
 char ARQUIVO_TREINADORES[TAM_ARQUIVO_TREINADORES];
@@ -61,13 +66,11 @@ int qsort_treinadores_idx(const void *a, const void *b) {
 
 /* Função de comparação entre chaves do índice bolsomons_idx */
 int qsort_bolsomons_idx(const void *a, const void *b) {
-	// Compara dois índices de bolsomon pelo id_bolsomon.
 	return strcmp(((bolsomons_index*)a)->id_bolsomon, ((bolsomons_index*)b)->id_bolsomon);
 }
 
 /* Função de comparação entre chaves do índice batalhas_idx */
 int qsort_batalhas_idx(const void *a, const void *b) {
-	// Compara dois índices de batalha pelo id_batalha.
 	return strcmp(((batalhas_index*)a)->id_batalha, ((batalhas_index*)b)->id_batalha);
 }
 
@@ -121,8 +124,6 @@ int qsort_data_idx(const void *a, const void *b) {
 int qsort_info_treinador(const void *a, const void *b) {
 	Info_Treinador *treinador_a = (Info_Treinador*)a;
 	Info_Treinador *treinador_b = (Info_Treinador*)b;
-
-	// A comparação é decrescente para as vitórias, então invertemos a lógica (b - a).
 	
 	// (a) Maior placar de tempo
 	if (treinador_b->vezes_mais_tempo != treinador_a->vezes_mais_tempo) {
@@ -137,7 +138,6 @@ int qsort_info_treinador(const void *a, const void *b) {
 		return treinador_b->vezes_mais_dano - treinador_a->vezes_mais_dano;
 	}
 	// (d) Menor valor de id_treinador
-	// A comparação é crescente para o ID (a vs b).
 	return strcmp(treinador_a->id_treinador, treinador_b->id_treinador);
 }
 
@@ -583,7 +583,7 @@ void remover_treinador_menu(char *id_treinador) {
 
 	// Modifica o registro no "arquivo" de dados.
 	int rrn_to_remove = treinadores_idx[found_idx].rrn;
-	strncpy(ARQUIVO_TREINADORES + rrn_to_remove * TAM_REGISTRO_TREINADOR, "*|", 2);
+	memcpy(ARQUIVO_TREINADORES + rrn_to_remove * TAM_REGISTRO_TREINADOR, "*|", 2);
 
 	// Atualiza o índice primário.
 	treinadores_idx[found_idx].rrn = -1;
@@ -863,7 +863,7 @@ void recompensar_campeao_menu(char *data_inicio, char *data_fim, double premio) 
 		return;
 	}
 	// Ordena os IDs de batalha para permitir busca binária neles.
-	qsort(batalhas_periodo, qtd_batalhas_periodo, TAM_ID_BATALHA, qsort_id_cmp);
+	qsort(batalhas_periodo, qtd_batalhas_periodo, TAM_ID_BATALHA, qsort_string_cmp);
 
 	// Agregar os placares de todos os treinadores que participaram dessas batalhas.
 	Info_Treinador placares[MAX_REGISTROS];
@@ -873,7 +873,7 @@ void recompensar_campeao_menu(char *data_inicio, char *data_fim, double premio) 
 		Resultado r = recuperar_registro_resultado(i);
 		
 		// Verifica se o resultado pertence a uma das batalhas do período.
-		if (bsearch(r.id_batalha, batalhas_periodo, qtd_batalhas_periodo, TAM_ID_BATALHA, qsort_id_cmp)) {
+		if (bsearch(r.id_batalha, batalhas_periodo, qtd_batalhas_periodo, TAM_ID_BATALHA, qsort_string_cmp)) {
 			int p_idx = -1;
 			// Procura o treinador na nossa lista de placares.
 			for (int j = 0; j < qtd_placares; j++) {
@@ -920,7 +920,7 @@ void recompensar_campeao_menu(char *data_inicio, char *data_fim, double premio) 
 			if (i > 0) {
 				printf(ERRO_TREINADOR_REMOVIDO, premio, t.apelido, placares[i].vezes_mais_tempo, placares[i].vezes_mais_derrotados, placares[i].vezes_mais_dano);
 			} else {
-				printf(CONCEDER_PREMIO, t.apelido, t.vezes_mais_tempo, t.vezes_mais_derrotados, t.vezes_mais_dano, premio);
+				printf(CONCEDER_PREMIO, t.apelido, placares[i].vezes_mais_tempo, placares[i].vezes_mais_derrotados, placares[i].vezes_mais_dano, premio);
 			}
 			
 			// Atualiza o saldo e a data do prêmio.
@@ -1455,8 +1455,3 @@ void set_arquivo_treinador_possui_bolsomon(char* novos_dados, size_t tamanho){
 }
 
 // ---------------- Implementação das suas próprias funções auxiliares ----------------
-
-// Função auxiliar para o qsort de strings (usada em listar_treinadores_bolsomons_menu)
-int qsort_string_cmp(const void *a, const void *b) {
-    return strcmp((const char*)a, (const char*)b);
-}
