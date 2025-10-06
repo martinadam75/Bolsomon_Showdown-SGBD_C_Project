@@ -1090,7 +1090,7 @@ void listar_batalhas_periodo_menu(char *data_inicio, char *data_fim) {
 		// A batalha está dentro do período. Recupera seu RRN e exibe.
 		batalhas_index key_b;
 		strcpy(key_b.id_batalha, data_idx[i].id_batalha);
-		int found_b_idx = busca_binaria(&key_b, batalhas_idx, qtd_registros_batalhas, sizeof(batalhas_index), qsort_batalhas_idx, false, 0);
+		int found_b_idx = busca_binaria(&key_b, batalhas_idx, qtd_registros_batalhas, sizeof(batalhas_index), qsort_batalhas_idx, true, 0);
 
 		if (found_b_idx != -1) {
 			exibir_batalha(batalhas_idx[found_b_idx].rrn);
