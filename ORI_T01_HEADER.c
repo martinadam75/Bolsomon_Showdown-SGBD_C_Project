@@ -153,25 +153,27 @@ int qsort_inverted_list_primary_search(const void *a, const void *b) {
 
 // ---------------- Criação do índice respectivo ----------------
 
+//Função para reconstruir o índice de treinadores
+void reconstruir_treinadores_idx() {
+    if(!treinadores_idx) {
+        treinadores_idx = malloc(MAX_REGISTROS * sizeof(treinadores_index));
+        if(!treinadores_idx) {
+            printf(ERRO_MEMORIA_INSUFICIENTE);
+            exit(1);
+        }
+    }
+
+    for(unsigned i = 0; i < qtd_registros_treinadores; i++) {
+        Treinador t = recuperar_registro_treinador(i);
+        treinadores_idx[i].rrn = (strncmp(t.id_treinador, "*|", 2)) ? i : -1;
+        strcpy(treinadores_idx[i].id_treinador, t.id_treinador);
+    }
+    qsort(treinadores_idx, qtd_registros_treinadores, sizeof(treinadores_index), qsort_treinadores_idx);
+}
+
 void criar_treinadores_idx() {
-	if(!treinadores_idx)
-		treinadores_idx = malloc(MAX_REGISTROS * sizeof(treinadores_index));
-
-	if(!treinadores_idx) {
-		printf(ERRO_MEMORIA_INSUFICIENTE);
-		exit(1);
-	}
-
-	for(unsigned i = 0; i < qtd_registros_treinadores; i++) {
-		Treinador t = recuperar_registro_treinador(i);
-
-		treinadores_idx[i].rrn = (strncmp(t.id_treinador, "*|", 2)) ? i : -1;
-
-		strcpy(treinadores_idx[i].id_treinador, t.id_treinador);
-	}
-
-	qsort(treinadores_idx, qtd_registros_treinadores, sizeof(treinadores_index), qsort_treinadores_idx);
-	printf(INDICE_CRIADO, "treinadores_idx");
+    reconstruir_treinadores_idx();
+    printf(INDICE_CRIADO, "treinadores_idx");
 }
 
 void criar_bolsomons_idx() {
@@ -1242,8 +1244,8 @@ void liberar_espaco_menu() {
 
 		// Se o registro NÃO estiver marcado como removido copia ele para o arquivo temporário na nova posição.
 		if (strncmp(registro_atual, "*|", 2) != 0) {
-			strncpy(temp_arquivo + novo_qtd * TAM_REGISTRO_TREINADOR, registro_atual, TAM_REGISTRO_TREINADOR);
-			novo_qtd++;
+			memcpy(temp_arquivo + novo_qtd * TAM_REGISTRO_TREINADOR, registro_atual, TAM_REGISTRO_TREINADOR);
+            novo_qtd++;
 		}
 	}
 
@@ -1251,8 +1253,10 @@ void liberar_espaco_menu() {
 	memcpy(ARQUIVO_TREINADORES, temp_arquivo, novo_qtd * TAM_REGISTRO_TREINADOR);
 	qtd_registros_treinadores = novo_qtd;
 
+	ARQUIVO_TREINADORES[novo_qtd * TAM_REGISTRO_TREINADOR] = '\0';
+
 	// Reconstrói o índice do zero, pois os RRNs mudaram.
-	criar_treinadores_idx();
+	reconstruir_treinadores_idx();
 
 	printf(SUCESSO);
 }
